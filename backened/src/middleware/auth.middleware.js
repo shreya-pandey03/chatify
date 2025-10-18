@@ -25,3 +25,4 @@ export const protectRoute = async (req, res, next) => {
     res.status(401).json({ message: "Not authorized, token failed" });
   }
 };
+};
