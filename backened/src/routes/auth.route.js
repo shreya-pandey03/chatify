@@ -1,3 +1,8 @@
+import express from 'express';
+import { signup } from '../controllers/auth.controller.js';
+const router = express.Router();
+
+router.get("/singup",signup);
 import express from "express";
 import { signup, login, logout } from "../controllers/auth.controller.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
@@ -17,10 +22,16 @@ const router = express.Router();
 
 router.use(arcjetProtection);
 
+router.get("/login",(req,res)=>{
+    res.send("Login endpoint");
+;})
 router.post("/singup", signup);
 
 router.post("/login", login);
 
+router.get("/logout",(req,res)=>{
+    res.send("Logout endpoint");
+});
 router.post("/logout", logout);
 
 

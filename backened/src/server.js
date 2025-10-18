@@ -8,6 +8,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
+import { connectDB } from './lib/db.js';
+dotenv.config();
 import cookiePareser from 'cookie-parser';
 
 
@@ -25,6 +27,7 @@ const PORT = ENV.PORT || 5000;
 
 app.use(express.json({ limit: "5mb" })); // req.body
 
+app.use(express.json());
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookiePareser());
@@ -34,6 +37,9 @@ app.use(cookiePareser());
 
 
 
+app.listen(PORT, () => 
+    console.log('Server is running on port:'+ PORT));
+  connectDB();    
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
