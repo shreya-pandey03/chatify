@@ -4,8 +4,9 @@
 function ChatPage() {
  
   return (
-    <div>
-   Chat Page      
+    <div className="z-10">
+   Chat Page 
+   <button onClick={logout}>logout</button>     
     </div>
   )
 }
