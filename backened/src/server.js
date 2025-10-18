@@ -2,6 +2,14 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
+// const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+import path from 'path';
+import authRoutes from './routes/auth.route.js';
+import messageRoutes from './routes/message.route.js';
+import cookiePareser from 'cookie-parser';
+
 
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
@@ -18,6 +26,10 @@ const PORT = ENV.PORT || 5000;
 app.use(express.json({ limit: "5mb" })); // req.body
 
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+app.use(express.json());
+app.use(cookiePareser());
+
+
 
 
 
