@@ -1,57 +1,36 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
-import {
-  MessageCircleIcon,
-  LockIcon,
-  MailIcon,
-  UserIcon,
-  LoaderIcon,
-} from "lucide-react";
-import {Link} from "react-router"; 
-function SignupPage() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
+import { MessageCircleIcon, LockIcon, MailIcon, UserIcon, LoaderIcon } from "lucide-react";
+import { Link } from "react-router";
+
+function SignUpPage() {
+  const [formData, setFormData] = useState({ fullName: "", email: "", password: "" });
   const { signup, isSigningUp } = useAuthStore();
 
- const handleSubmit = (e) => {
-  e.preventDefault();
-
-  const formData = {
-    fullName,
-    username,
-    password,
-    confirmPassword,
-    gender,
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signup(formData);
   };
 
-  signup(formData); // ✅ Now data is properly passed
-};
-
-
   return (
-    <div className="w-full flex items-center justify-center p-4  bg-slate-900">
+    <div className="w-full flex items-center justify-center p-4 bg-slate-900">
       <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row">
-            {/*FORM COLUMN - LEFT SIDE */}
+            {/* FORM CLOUMN - LEFT SIDE */}
             <div className="md:w-1/2 p-8 flex items-center justify-center md:border-r border-slate-600/30">
               <div className="w-full max-w-md">
                 {/* HEADING TEXT */}
                 <div className="text-center mb-8">
                   <MessageCircleIcon className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-                  <h2 className="text-2xl font-bold text-slate-200 mb-2">
-                    Create Account
-                  </h2>
+                  <h2 className="text-2xl font-bold text-slate-200 mb-2">Create Account</h2>
                   <p className="text-slate-400">Sign up for a new account</p>
                 </div>
 
                 {/* FORM */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/*FULL NAME */}
+                  {/* FULL NAME */}
                   <div>
                     <label className="auth-input-label">Full Name</label>
                     <div className="relative">
@@ -60,34 +39,30 @@ function SignupPage() {
                       <input
                         type="text"
                         value={formData.fullName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, fullName: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                         className="input"
                         placeholder="Shreya Pandey"
                       />
                     </div>
                   </div>
 
-                  {/*EMAIL INPUT */}
+                  {/* EMAIL INPUT */}
                   <div>
                     <label className="auth-input-label">Email</label>
                     <div className="relative">
                       <MailIcon className="auth-input-icon" />
 
                       <input
-                        type="Email"
+                        type="email"
                         value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input"
                         placeholder="shreya@gmail.com"
                       />
                     </div>
                   </div>
 
-                  {/*PASSWARD INPUT */}
+                  {/* PASSWORD INPUT */}
                   <div>
                     <label className="auth-input-label">Password</label>
                     <div className="relative">
@@ -96,21 +71,15 @@ function SignupPage() {
                       <input
                         type="password"
                         value={formData.password}
-                        onChange={(e) =>
-                          setFormData({ ...formData, password: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         className="input"
-                        placeholder="Enter your Password"
+                        placeholder="Enter your password"
                       />
                     </div>
                   </div>
 
                   {/* SUBMIT BUTTON */}
-                  <button
-                    className="auth-btn"
-                    type="submit"
-                    disabled={isSigningUp}
-                  >
+                  <button className="auth-btn" type="submit" disabled={isSigningUp}>
                     {isSigningUp ? (
                       <LoaderIcon className="w-full h-5 animate-spin text-center" />
                     ) : (
@@ -126,9 +95,8 @@ function SignupPage() {
                 </div>
               </div>
             </div>
-          </div>
 
-           {/* FORM ILLUSTRATION - RIGHT SIDE */}
+            {/* FORM ILLUSTRATION - RIGHT SIDE */}
             <div className="hidden md:w-1/2 md:flex items-center justify-center p-6 bg-gradient-to-bl from-slate-800/20 to-transparent">
               <div>
                 <img
@@ -147,16 +115,10 @@ function SignupPage() {
                 </div>
               </div>
             </div>
-
-
-
-
-
-
+          </div>
         </BorderAnimatedContainer>
       </div>
     </div>
   );
 }
-
-export default SignupPage;
+export default SignUpPage;
