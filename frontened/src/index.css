@@ -8,14 +8,6 @@ html {
   text-size-adjust: 100%; /* Standard property for modern browsers */
 }
 
-
-
-
-
-
-
-
-
 @property --border-angle {
   inherits: false;
   initial-value: 0deg;

@@ -27,6 +27,7 @@ const PORT = ENV.PORT || 5000;
 
 app.use(express.json({ limit: "5mb" })); // req.body
 
+// app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(express.json());
@@ -35,6 +36,10 @@ app.use(cookiePareser());
 
 
 
+app.use(cors({
+  origin: 'http://localhost:3000', // frontend origin
+  credentials: true
+}));
 
 
 app.listen(PORT, () => 
