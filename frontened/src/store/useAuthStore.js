@@ -1,87 +1,63 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-
 // import { io } from "socket.io-client";
 
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: true,
   isSigningUp: false,
   isLoggingIn: false,
-  // socket: null,
-  // onlineUsers: [],
+  socket: null,
+  onlineUsers: [],
 
-checkAuth: async () => {
-  set({ isCheckingAuth: true }); // Start with setting loading state
+  checkAuth: async () => {
+    try {
+      const res = await axiosInstance.get("/auth/check");
+      set({ authUser: res.data });
+      get().connectSocket();
+    } catch (error) {
+      console.log("Error in authCheck:", error);
+      set({ authUser: true });
+    } finally {
+      set({ isCheckingAuth: false });
+    }
+  },
 
-  try {
-    const res = await axiosInstance.get("/auth/check");
-
-    // Assuming `res.data` contains the authenticated user object
-    set({ authUser: res.data });
-
-    // Call socket connection if needed
-    get().connectSocket();
-  } catch (error) {
-    console.error("Error in checkAuth:", error);
-    set({ authUser: null });
-  } finally {
-    set({ isCheckingAuth: false });
-  }
-},
-
-
- 
-  
-
-signup: async () => {
+  signup: async (data) => {
     set({ isSigningUp: true });
     try {
-      const res = await axiosInstance.post("/auth/signup");
+      const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
 
       toast.success("Account created successfully!");
       get().connectSocket();
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Signup failed. Please try again.");
+      toast.error(error.response.data.message);
     } finally {
       set({ isSigningUp: false });
     }
-  
+  },
 
+  login: async (data) => {
+    set({ isLoggingIn: true });
+    try {
+      const res = await axiosInstance.post("/auth/login", data);
+      set({ authUser: res.data });
 
+      toast.success("Logged in successfully");
 
-// } catch (error) {
-//   console.error("Signup error:", error.message);
-//   console.error("Full error:", error);
-//   toast.error(error?.response?.data?.message || "Signup failed. Check your network.");
-// }
-//   finally {
-//     set({ isSigningUp: false });
-//   }
-},
+      get().connectSocket();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isLoggingIn: false });
+    }
+  },
 
-
- login: async (credentials) => {
-  set({ isLoggingIn: true });
-  try {
-    const res = await axiosInstance.post("/auth/login", credentials);
-    set({ authUser: res.data });
-
-    toast.success("Logged in successfully");
-
-    get().connectSocket();
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Login failed");
-  } finally {
-    set({ isLoggingIn: false });
-  }
-},
-
-
-logout: async () => {
+  logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
@@ -93,4 +69,36 @@ logout: async () => {
     }
   },
 
+  updateProfile: async (data) => {
+    try {
+      const res = await axiosInstance.put("/auth/update-profile", data);
+      set({ authUser: res.data });
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      console.log("Error in update profile:", error);
+      toast.error(error.response.data.message);
+    }
+  },
+
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser || get().socket?.connected) return;
+
+    const socket = io(BASE_URL, {
+      withCredentials: true, // this ensures cookies are sent with the connection
+    });
+
+    socket.connect();
+
+    set({ socket });
+
+    // listen for online users event
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+  },
+
+  disconnectSocket: () => {
+    if (get().socket?.connected) get().socket.disconnect();
+  },
 }));

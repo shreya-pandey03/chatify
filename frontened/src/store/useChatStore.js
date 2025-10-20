@@ -21,26 +21,38 @@ export const useChatStore = create((set, get) => ({
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
+
   getAllContacts: async () => {
-    set({ isUsersLoading: true });
-    try {
-      const res = await axiosInstance.get("/messages/contacts");
-      set({ allContacts: res.data });
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isUsersLoading: false });
-    }
-  },
+  set({ isUsersLoading: true });
+  try {
+    const res = await axiosInstance.get("/messages/contacts");
+    set({ allContacts: res.data });
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to load contacts. Please try again.";
+    toast.error(errorMessage);
+    console.error("getAllContacts error:", error);
+  } finally {
+    set({ isUsersLoading: false });
+  }
+},
+
+
   getMyChatPartners: async () => {
-    set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/messages/chats");
-      set({ chats: res.data });
+      const response = await axiosInstance.get("/api/chat/partners"); // Or your actual API call
+
+      if (response && response.data) {
+        const partners = response.data;
+        // Do something with partners
+      } else {
+        console.error(
+          "No data received in getMyChatPartners response:",
+          response
+        );
+      }
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isUsersLoading: false });
+      console.error("Error fetching chat partners:", error);
     }
   },
 
