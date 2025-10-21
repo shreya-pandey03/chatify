@@ -1,7 +1,7 @@
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
-import { generateToken } from "./lib/utils.js";
+import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
-import bcrypt from "../bcryptjs";
+import bcrypt from "bcryptjs";
 import { ENV } from "../lib/env.js";
 import cloudinary from "../lib/cloudinary.js";
 
@@ -67,7 +67,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req,res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
