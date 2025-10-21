@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { LogOutIcon, VolumeOffIcon, Volume2Icon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -20,7 +19,7 @@ function ProfileHeader() {
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
-    reader.onloaded = async () => {
+    reader.onloadend = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
       await updateProfile({ profilePic: base64Image });
@@ -38,7 +37,7 @@ function ProfileHeader() {
               onClick={() => fileInputRef.current.click()}
             >
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.jpg"}
+                src={selectedImg || authUser.profilePic || "/avatar.png"}
                 alt="User image"
                 className="size-full object-cover"
               />

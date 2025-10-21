@@ -21,38 +21,26 @@ export const useChatStore = create((set, get) => ({
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
-
   getAllContacts: async () => {
-  set({ isUsersLoading: true });
-  try {
-    const res = await axiosInstance.get("/messages/contacts");
-    set({ allContacts: res.data });
-  } catch (error) {
-    const errorMessage =
-      error.response?.data?.message || "Failed to load contacts. Please try again.";
-    toast.error(errorMessage);
-    console.error("getAllContacts error:", error);
-  } finally {
-    set({ isUsersLoading: false });
-  }
-},
-
-
-  getMyChatPartners: async () => {
+    set({ isUsersLoading: true });
     try {
-      const response = await axiosInstance.get("/api/chat/partners"); // Or your actual API call
-
-      if (response && response.data) {
-        const partners = response.data;
-        // Do something with partners
-      } else {
-        console.error(
-          "No data received in getMyChatPartners response:",
-          response
-        );
-      }
+      const res = await axiosInstance.get("/messages/contacts");
+      set({ allContacts: res.data });
     } catch (error) {
-      console.error("Error fetching chat partners:", error);
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isUsersLoading: false });
+    }
+  },
+  getMyChatPartners: async () => {
+    set({ isUsersLoading: true });
+    try {
+      const res = await axiosInstance.get("/messages/chats");
+      set({ chats: res.data });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isUsersLoading: false });
     }
   },
 
@@ -87,10 +75,7 @@ export const useChatStore = create((set, get) => ({
     set({ messages: [...messages, optimisticMessage] });
 
     try {
-      const res = await axiosInstance.post(
-        `/messages/send/${selectedUser._id}`,
-        messageData
-      );
+      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: messages.concat(res.data) });
     } catch (error) {
       // remove optimistic message on failure
@@ -106,8 +91,7 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
 
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser._id;
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
       if (!isMessageSentFromSelectedUser) return;
 
       const currentMessages = get().messages;
@@ -117,21 +101,13 @@ export const useChatStore = create((set, get) => ({
         const notificationSound = new Audio("/sounds/notification.mp3");
 
         notificationSound.currentTime = 0; // reset to start
-        notificationSound
-          .play()
-          .catch((e) => console.log("Audio play failed:", e));
+        notificationSound.play().catch((e) => console.log("Audio play failed:", e));
       }
     });
   },
 
-  
-
-      unsubscribeFromMessages: () => {
+  unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
-  }
-
-
-
-
+  },
 }));

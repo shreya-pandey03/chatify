@@ -17,4 +17,4 @@ function useKeyboardSound() {
   return { playRandomKeyStrokeSound };
 }
 
-export default useKeyboardSound;
+export default useKeyboardSound
