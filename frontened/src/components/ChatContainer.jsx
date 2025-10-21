@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
@@ -78,6 +77,5 @@ function ChatContainer() {
     </>
   );
 }
-
 
 export default ChatContainer;

@@ -41,7 +41,7 @@ function SignUpPage() {
                         value={formData.fullName}
                         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                         className="input"
-                        placeholder="Shreya Pandey"
+                        placeholder="John Doe"
                       />
                     </div>
                   </div>
@@ -57,7 +57,7 @@ function SignUpPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input"
-                        placeholder="shreya@gmail.com"
+                        placeholder="johndoe@gmail.com"
                       />
                     </div>
                   </div>
@@ -100,7 +100,7 @@ function SignUpPage() {
             <div className="hidden md:w-1/2 md:flex items-center justify-center p-6 bg-gradient-to-bl from-slate-800/20 to-transparent">
               <div>
                 <img
-                  src="/signup.jpg"
+                  src="/signup.png"
                   alt="People using mobile devices"
                   className="w-full h-auto object-contain"
                 />
