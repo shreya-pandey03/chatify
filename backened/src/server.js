@@ -10,8 +10,6 @@ import { ENV } from "./lib/env.js";
 import { app, server } from "./lib/socket.js";
 
 const __dirname = path.resolve();
-// const express = require('express');
-
 
 const PORT = ENV.PORT || 3000;
 
@@ -23,7 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 // make ready for deployment
-if (ENV.Node_ENV === "production") {
+if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (_, res) => {

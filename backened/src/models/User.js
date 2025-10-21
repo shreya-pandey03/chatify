@@ -1,31 +1,3 @@
-import e from "express";
-import mongoose from "mongoose";
-
-
-
-const userSchema = new mongoose.Schema({
-    username:{
-        type:String,
-        required:true,
-        unique:true,
-    },
-    email:{
-        type:String,
-        required:true,
-    },
-    password:{
-        type:String,
-        required:true,
-        minlength:6,
-    },
-    ProfilePic:{
-        type:String,
-        default:"",
-    },
-},{timestamps:true});
-
-
-const User = mongoose.model("User",userSchema);
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
